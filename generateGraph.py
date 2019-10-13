@@ -1,46 +1,64 @@
+# -*- coding: utf-8 -*-
+"""
+@author: Parjua
+"""
+
+
 import matplotlib.pyplot as plt
+import json
 
 
-def getRecta(eje, value, end, start=0):
-    axeX, axeY = [], []
-    eje = eje.lower()
+def getStraight(axis, value, start, end):
+    """
+    Return two lists required to make a straight.
+    Params: 1) axis where the value will be.
+            2) value in the axis.
+            3) point to start on the opposite axis.
+            4) point to end on the opposite axis.
+    """
+
+    axisX, axisY = [], []
+    axis = axis.lower()
     
-    if(eje == "x"):
-        for i in range(start, end + 1):
-            axeX.append(value)
-            axeY.append(i)
+    if(axis == "x"):
+        axisX = [value, value]
+        axisY = [start, end]
     else:
-        for i in range(start, end + 1):
-            axeX.append(i)
-            axeY.append(value)
+        axisX = [start, end]
+        axisY = [value, value]
     
-    return axeX, axeY
+    return axisX, axisY
 
 
-puntos = [[5, 8], [1, 13], [10, 15], [11, 15], [20, 12], [14, 8]]
+def getListPoints(filePath):
+    """
+    Returns a list of dictionaries, that contain points, from a JSON file in 'filePath'.
+    """
 
-for par in puntos:
-    plt.plot(par[0], par[1], "ro")
+    db = open(filePath, "r")
+    dbString = db.read()
+    parsedData = json.loads(dbString)
 
-x, y = getRecta("x", 5, 20)
-plt.plot(x, y, "red")
+    return parsedData["data"]
 
-x, y = getRecta("y", 13, 5)
-plt.plot(x, y, "red")
 
-x, y = getRecta("y", 15, 20, 5)
-plt.plot(x, y, "red")
+def setPoints(points):
+    """
+    Set the points in the main plot.
+    """
 
-x, y = getRecta("x", 20, 15)
-plt.plot(x, y, "red")
+    for point in points:
+        plt.plot(point["x"], point["y"], "bo", label=point["label"])
 
-x, y = getRecta("x", 11, 15)
-plt.plot(x, y, "red")
 
-x, y = getRecta("y", 8, 20, 11)
-plt.plot(x, y, "red")
+filePath = "data.json"
+points = getListPoints(filePath)
+
+setPoints(points)
 
 # plt.axis([xmin, xmax, ymin, ymax])
 plt.axis([-0.5, 20.5, -0.5, 20.5])
+
+# plt.legend(loc="upper left")
 
 plt.show()
