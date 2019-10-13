@@ -7,13 +7,19 @@ Created on Fri Sep 27 16:05:48 2019
 
 
 class Node:
-    def __init__(self, nodeId, valueX, valueY, parent):
-        self.nodeId = nodeId
+    def __init__(self, label, valueX, valueY, parent):
+        self.label = label
         self.valueX = valueX
         self.valueY = valueY
         self.parent = parent
         self.leftChild = None
         self.rightChild = None
+
+    def getLabel(self):
+        return self.label
+
+    def setLabel(self, label):
+        self.label = label
 
     def getValueX(self):
         return self.valueX
