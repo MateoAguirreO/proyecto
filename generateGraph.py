@@ -51,13 +51,46 @@ def setPoints(points):
         plt.plot(point["x"], point["y"], "bo", label=point["label"])
 
 
+def setStraights(points):
+    """
+    Set the straights int the main plot.
+    """
+
+    axis = ["x", "y", "y", "x", "x", "y"]  # This line should contain the ids getted from the tree of Data.py
+    i = 0
+
+    for point in points:
+        x, y = getStraight(axis[i], point[axis[i]], 0, 21)
+        plt.plot(x, y, "red")
+        i += 1
+
+# x, y = getStraight("x", 5, 0, 20)
+# plt.plot(x, y, "red")
+
+# x, y = getStraight("y", 13, 0, 5)
+# plt.plot(x, y, "red")
+
+# x, y = getStraight("y", 15, 5, 20)
+# plt.plot(x, y, "red")
+
+# x, y = getStraight("x", 20, 0, 15)
+# plt.plot(x, y, "red")
+
+# x, y = getStraight("x", 11, 0, 15)
+# plt.plot(x, y, "red")
+
+# x, y = getStraight("y", 8, 11, 20)
+# plt.plot(x, y, "red")
+
+
 filePath = "data.json"
 points = getListPoints(filePath)
 
 setPoints(points)
+setStraights(points)  # This should be modified
 
 # plt.axis([xmin, xmax, ymin, ymax])
-plt.axis([-0.5, 20.5, -0.5, 20.5])
+plt.axis([-0.5, 22.5, -0.5, 22.5])
 
 # plt.legend(loc="upper left")
 
