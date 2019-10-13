@@ -6,11 +6,13 @@ Created on Fri Sep 27 16:04:54 2019
 """
 
 from Node import Node
+import json
 
 
 class Data:
     def __init__(self):
         self.root = None
+        self.addNodes()
 
     def getNodeLevel(self, node):
         if(node.parent is None):
@@ -18,9 +20,11 @@ class Data:
 
         return 1 + self.getNodeLevel(node.parent)
 
-    def addNodes(self, list):
-        for point in list:
-            self.addNode(point[0], point[1], point[2])
+    def addNodes(self):
+        nodeList = self.getListPoints()
+
+        for point in nodeList:
+            self.addNode(point["label"], point["x"], point["y"])
 
     def addNode(self, label, valueX, valueY):
         if(self.root):
@@ -29,7 +33,9 @@ class Data:
             self.root = Node(label, valueX, valueY, None)
 
     def _addNode(self, label, valueX, valueY, parent):
+        # Compare if the parent level is odd to know what component compare
         if(self.getNodeLevel(parent) % 2 == 0):
+            # Compare the valueX param with the parent valueX
             if(valueX > parent.getValueX()):
                 if(parent.getRightChild()):
                     self._addNode(label, valueX, valueY, parent.getRightChild())
@@ -43,6 +49,7 @@ class Data:
             else:
                 print(f"Node {str(valueX)} already exists!")
         else:
+            # Compare the valueY param with the parent valueY
             if(valueY > parent.getValueY()):
                 if(parent.getRightChild()):
                     self._addNode(label, valueX, valueY, parent.getRightChild())
@@ -76,11 +83,23 @@ class Data:
 
         return preList
 
+    def getListPoints(self):
+        """
+        Returns a list of dictionaries, that contain points, from a JSON file in 'filePath'.
+        """
+
+        filePath = "data.json"
+
+        with open(filePath, "r") as db:
+            dbString = db.read()
+
+        parsedData = json.loads(dbString)
+
+        return parsedData["data"]
+
 
 myData = Data()
-points = [["a", 5, 8], ["b", 1, 13], ["c", 10, 15], ["d", 11, 16], ["e", 20, 12], ["f", 14, 8]]
-
-myData.addNodes(points)
+points = myData.getListPoints()
 
 l = myData.preOrd()
 
