@@ -7,37 +7,54 @@ Created on Fri Sep 27 16:04:54 2019
 
 from Node import Node
 
+
 class Data:
-
-
-    # nodeId = eje
     def __init__(self):
-        #self.root = Node("x", datox, datoy)
         self.root = None
 
+    def getNodeLevel(self, node):
+        if(node.parent is None):
+            return 0
+
+        return 1 + self.getNodeLevel(node.parent)
+
     def addNodes(self, list):
-        for coord in list:
-            self.addNode("x", coord[0], coord[1])
+        for point in list:
+            self.addNode(point[0], point[1], point[2])
 
-    def addNode(self, nodeId, valueX, valueY):
+    def addNode(self, label, valueX, valueY):
         if(self.root):
-            self._addNode(nodeId, valueX, valueY, self.root)
+            self._addNode(label, valueX, valueY, self.root)
         else:
-            self.root = Node(nodeId, valueX, valueY, None)
+            self.root = Node(label, valueX, valueY, None)
 
-    def _addNode(self, nodeId, valueX, valueY, parent):
-        if(valueY > parent.getValueY()):
-            if(parent.getRightChild()):
-                self._addNode("x", valueX, valueY, parent.getRightChild())
+    def _addNode(self, label, valueX, valueY, parent):
+        if(self.getNodeLevel(parent) % 2 == 0):
+            if(valueX > parent.getValueX()):
+                if(parent.getRightChild()):
+                    self._addNode(label, valueX, valueY, parent.getRightChild())
+                else:
+                    parent.setRightChild(Node(label, valueX, valueY, parent))
+            elif(valueX < parent.getValueX()):
+                if(parent.getLeftChild()):
+                    self._addNode(label, valueX, valueY, parent.getLeftChild())
+                else:
+                    parent.setLeftChild(Node(label, valueX, valueY, parent))
             else:
-                parent.setRightChild(Node("y", valueX, valueY, parent))
-        elif(valueY < parent.getValueY()):
-            if(parent.getLeftChild()):
-                self._addNode("x", valueX, valueY, parent.getLeftChild())
-            else:
-                parent.setLeftChild(Node("y", valueX, valueY, parent))
+                print(f"Node {str(valueX)} already exists!")
         else:
-            print(f"Node {str(valueY)} already exists!")
+            if(valueY > parent.getValueY()):
+                if(parent.getRightChild()):
+                    self._addNode(label, valueX, valueY, parent.getRightChild())
+                else:
+                    parent.setRightChild(Node(label, valueX, valueY, parent))
+            elif(valueY < parent.getValueY()):
+                if(parent.getLeftChild()):
+                    self._addNode(label, valueX, valueY, parent.getLeftChild())
+                else:
+                    parent.setLeftChild(Node(label, valueX, valueY, parent))
+            else:
+                print(f"Node {str(valueY)} already exists!")
 
     def preOrd(self):
         if(self.root):
@@ -61,17 +78,14 @@ class Data:
 
 
 myData = Data()
+points = [["a", 5, 8], ["b", 1, 13], ["c", 10, 15], ["d", 11, 16], ["e", 20, 12], ["f", 14, 8]]
 
-myData.addNode("x", 5, 8)
-myData.addNode("y", 1, 13)
-myData.addNode("y", 10, 15)
-myData.addNode("y", 11, 15)
-myData.addNode("y", 20, 12)
+myData.addNodes(points)
 
 l = myData.preOrd()
 
 for n in l:
-    print([n.getValueX(), n.getValueY()])
+    print(n.getLabel(), ": ", [n.getValueX(), n.getValueY()], " lvl: ", myData.getNodeLevel(n))
 
 
 '''def agregar(self, n, dato):
