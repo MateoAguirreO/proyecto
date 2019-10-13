@@ -35,8 +35,9 @@ def getListPoints(filePath):
     Returns a list of dictionaries, that contain points, from a JSON file in 'filePath'.
     """
 
-    db = open(filePath, "r")
-    dbString = db.read()
+    with open(filePath, "r") as db:
+        dbString = db.read()
+
     parsedData = json.loads(dbString)
 
     return parsedData["data"]
