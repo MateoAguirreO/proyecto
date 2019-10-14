@@ -3,3 +3,7 @@
 
 
 Mas info en este archivo [PDF](./documentation/info.pdf)
+
+Mateo Aguirre
+Juan Sebastian Henao P
+2019-2
