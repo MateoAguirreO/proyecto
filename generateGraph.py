@@ -10,6 +10,9 @@ import Data
 
 
 class Graph:
+    """
+    Class in charge to create the divisions in the plot, get lines and points and save it.
+    """
     def __init__(self, tree):
         self.tree = tree
         self.nodes = tree.preOrd()
@@ -21,7 +24,7 @@ class Graph:
 
     def showPlot(self):
         self.setPoints()
-        self.setStraights()
+        self.drawStraigths()
         plt.show()
 
     def getStraight(self, axis, value, start, end):
@@ -53,9 +56,9 @@ class Graph:
         for node in self.nodes:
             plt.plot(node.getValueX(), node.getValueY(), "bo")
 
-    def setStraights(self):
+    def getListStraights(self):
         """
-        Set the straights on the main plot.
+        Returns a list of the straights
         """
 
         straightsList = []
@@ -67,6 +70,16 @@ class Graph:
             else:
                 limSouth, limNorth = self.limitHorizontal(straightsList, node.getValueX(), node.getValueY())
                 straightsList.append(self.getStraight("y", node.getValueY(), limSouth, limNorth))
+
+        return straightsList
+
+
+    def drawStraigths(self):
+        """
+        Draw the straights on the main plot and save the step-by-step on the folder /img/.
+        """
+
+        straightsList = self.getListStraights()
         
         i = 0
         for straight in straightsList:
