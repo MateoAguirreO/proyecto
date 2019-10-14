@@ -6,6 +6,7 @@
 
 import matplotlib.pyplot as plt
 import json
+import Data
 
 
 def getStraight(axis, value, start, end):
@@ -30,69 +31,41 @@ def getStraight(axis, value, start, end):
     return axisX, axisY
 
 
-def getListPoints(filePath):
-    """
-    Returns a list of dictionaries, that contain points, from a JSON file in 'filePath'.
-    """
-
-    with open(filePath, "r") as db:
-        dbString = db.read()
-
-    parsedData = json.loads(dbString)
-
-    return parsedData["data"]
-
-
 def setPoints(points):
     """
     Set the points in the main plot.
     """
 
     for point in points:
-        plt.plot(point["x"], point["y"], "bo", label=point["label"])
+        plt.plot(point["x"], point["y"], "bo")
 
 
-def setStraights(points):
+def setStraights(tree):
     """
-    Set the straights int the main plot.
+    Set the straights on the main plot.
     """
 
-    axis = ["x", "y", "y", "x", "x", "y"]  # This line should contain the ids getted from the tree of Data.py
-    i = 0
+    nodes = tree.preOrd()
+    straightsList = []
 
-    for point in points:
-        x, y = getStraight(axis[i], point[axis[i]], 0, 21)
-        plt.plot(x, y, "red")
-        i += 1
-
-# x, y = getStraight("x", 5, 0, 20)
-# plt.plot(x, y, "red")
-
-# x, y = getStraight("y", 13, 0, 5)
-# plt.plot(x, y, "red")
-
-# x, y = getStraight("y", 15, 5, 20)
-# plt.plot(x, y, "red")
-
-# x, y = getStraight("x", 20, 0, 15)
-# plt.plot(x, y, "red")
-
-# x, y = getStraight("x", 11, 0, 15)
-# plt.plot(x, y, "red")
-
-# x, y = getStraight("y", 8, 11, 20)
-# plt.plot(x, y, "red")
+    for node in nodes:
+        if(tree.getNodeLevel(node) % 2 == 0):
+            straightsList.append(getStraight("x", node.getValueX(), 0, 21))
+        else:
+            straightsList.append(getStraight("y", node.getValueY(), 0, 21))
+    
+    for straight in straightsList:
+        plt.plot(straight[0], straight[1])
 
 
-filePath = "data.json"
-points = getListPoints(filePath)
+tree = Data.Data()
+points = tree.getListPoints()
 
 setPoints(points)
-setStraights(points)  # This should be modified
+setStraights(tree)
 
-# plt.axis([xmin, xmax, ymin, ymax])
-plt.axis([-0.5, 22.5, -0.5, 22.5])
-
-# plt.legend(loc="upper left")
+# Plot Canvas Configurations
+plt.axis([-0.5, 22.5, -0.5, 22.5])  # plt.axis([xmin, xmax, ymin, ymax])
+plt.legend(loc="upper left")
 
 plt.show()
