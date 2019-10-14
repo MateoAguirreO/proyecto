@@ -54,8 +54,12 @@ def setStraights(tree):
         else:
             straightsList.append(getStraight("y", node.getValueY(), 0, 21))
     
+    i = 0
     for straight in straightsList:
         plt.plot(straight[0], straight[1])
+        # Lines to save the png's of each step in the process of making the straights
+        # plt.savefig("img/"+str(nodes[i].getLabel())+".png")
+        # i += 1
 
 
 tree = Data.Data()
