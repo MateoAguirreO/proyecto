@@ -5,8 +5,6 @@
 
 
 import matplotlib.pyplot as plt
-import json
-import Data
 
 
 class Graph:
@@ -20,12 +18,12 @@ class Graph:
 
         # Plot Canvas Configurations
         plt.axis([-0.5, self.maxValue+0.5, -0.5, self.maxValue+0.5])  # plt.axis([xmin, xmax, ymin, ymax])
-        plt.legend(loc="upper left")
+        # plt.legend(loc="upper left")
 
-    def showPlot(self):
+    def showGraph(self):
         self.setPoints()
         self.drawStraigths()
-        plt.show()
+        # plt.show()
 
     def getStraight(self, axis, value, start, end):
         """
@@ -169,6 +167,6 @@ class Graph:
         return limSouth, limNorth
 
 
-tree = Data.Data()
-graph = Graph(tree)
-graph.showPlot()
+# tree = Data.Data()
+# graph = Graph(tree)
+# graph.showGraph()
