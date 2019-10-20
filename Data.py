@@ -86,6 +86,65 @@ class Data:
 
         return preList
 
+    def postOrder(self):
+        if(self.root):
+            postNodeList=[]
+            postNodeList=self._postOrder(self.root, postNodeList)
+            return postNodeList
+        else:
+            print("Empty Tree")
+
+    def _postOrder(self, node, postList):
+
+        if(node.hasLeftChild()):
+            self._postOrder(node.getLeftChild(), postList)
+
+        if(node.hasRightChild()):
+            self._postOrder(node.getRightChild(), postList)
+
+        postList.append(node)
+
+        return postList
+
+
+
+    def inOrder(self):
+        if(self.root):
+            inNodeList=[]
+            inNodeList=self._postOrder(self.root, inNodeList)
+            return inNodeList
+        else:
+            print("Empty Tree")
+
+    def _postOrder(self, node, inList):
+
+        if(node.hasLeftChild()):
+            self._postOrder(node.getLeftChild(), inList)
+
+        inList.append(node)
+
+        if(node.hasRightChild()):
+            self._postOrder(node.getRightChild(), inList)
+        return inList
+
+
+
+
+    '''
+    defanchura(self, n):
+        if not n is None:
+            cola = []
+            nodoTmp = None
+            cola.append(n)
+            while len(cola) > 0:
+                nodoTmp = cola.pop(0)
+                print(nodoTmp.dato, end = " ")
+                if not nodoTmp.izq is None:
+                    cola.append(nodoTmp.izq)
+                if not nodoTmp.der is None:
+                    cola.append(nodoTmp.der)
+    '''
+
     def getListPoints(self):
         """
         Returns a list of dictionaries, that contain points, from a JSON file in 'filePath'.
