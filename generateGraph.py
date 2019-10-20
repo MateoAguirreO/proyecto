@@ -20,7 +20,7 @@ class Graph:
         plt.axis([-0.5, self.maxValue+0.5, -0.5, self.maxValue+0.5])  # plt.axis([xmin, xmax, ymin, ymax])
         # plt.legend(loc="upper left")
 
-    def showGraph(self):
+    def setGraph(self):
         self.setPoints()
         self.drawStraigths()
         # plt.show()
@@ -62,7 +62,7 @@ class Graph:
         straightsList = []
 
         for node in self.nodes:
-            if(tree.getNodeLevel(node) % 2 == 0):
+            if(self.tree.getNodeLevel(node) % 2 == 0):
                 limSouth, limNorth = self.limitVertical(straightsList, node.getValueX(), node.getValueY())
                 straightsList.append(self.getStraight("x", node.getValueX(), limSouth, limNorth))
             else:
@@ -169,4 +169,4 @@ class Graph:
 
 # tree = Data.Data()
 # graph = Graph(tree)
-# graph.showGraph()
+# graph.setGraph()
