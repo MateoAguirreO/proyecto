@@ -21,6 +21,7 @@ class Application(tk.Frame):
 
         self.tree = Data.Data()
         self.graph = generateGraph.Graph(self.tree)
+        self.graph.setGraph()
 
     def createWidgets(self):
         self.i = 0
@@ -35,6 +36,11 @@ class Application(tk.Frame):
         self.btnResetGraph["command"] = self.deleteGraph
         self.btnResetGraph.pack(side="top")
 
+        self.btnCreateCanvas = tk.Button(self)
+        self.btnCreateCanvas["text"] = "See Map"
+        self.btnCreateCanvas["command"] = self.createCanvas
+        self.btnCreateCanvas.pack(side="top")
+
         self.btnQuit = tk.Button(self, text="QUIT", fg="red", command=self.master.destroy)
         self.btnQuit.pack(side="bottom")
 
@@ -44,11 +50,11 @@ class Application(tk.Frame):
 
     def nextGraph(self):
         if(self.canvas):
-            if(self.i == len(self.tree.preOrd())):
+            if(self.i >= len(self.tree.preOrd())):
                 self.i = 0
             img1 = Image.open("img/"+str(self.i)+".png")
-            self.image1 = ImageTk.PhotoImage(img1.resize((512, 384)))
-            self.canvas.create_image(420, 200, image=self.image1)
+            self.image = ImageTk.PhotoImage(img1.resize((512, 384)))
+            self.canvas.create_image(420, 200, image=self.image)
             self.i += 1
         else:
             self.createCanvas()
