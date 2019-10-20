@@ -127,23 +127,29 @@ class Data:
             self._postOrder(node.getRightChild(), inList)
         return inList
 
+        def width(self):
+            if(self.root):
+                widthList=[]
+                widthList=self._width(self.root, widthList)
+                return widthList
+            else:
+                print(">Empty Tree")
 
+        def _width(self, node, widthList):
+            listTmp=[]
+            nodeTmp=None
+            listTmp.append(node)
+            while len(listTmp>0):
+                nodeTmp= cola.pop(0)
+                widthList.append(nodeTmp)
 
+                if(nodeTmp.hasLeftChild()):
+                    listTmp.append(nodeTmp.getLeftChild())
+                if(nodeTmp.hasRightChild()):
+                    listTmp.append(nodeTmp.getRightChild())
+            return widthList
 
-    '''
-    defanchura(self, n):
-        if not n is None:
-            cola = []
-            nodoTmp = None
-            cola.append(n)
-            while len(cola) > 0:
-                nodoTmp = cola.pop(0)
-                print(nodoTmp.dato, end = " ")
-                if not nodoTmp.izq is None:
-                    cola.append(nodoTmp.izq)
-                if not nodoTmp.der is None:
-                    cola.append(nodoTmp.der)
-    '''
+    
 
     def getListPoints(self):
         """
