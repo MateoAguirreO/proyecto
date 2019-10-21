@@ -7,6 +7,7 @@ Created on Fri Sep 27 16:04:54 2019
 
 from Node import Node
 import json
+import Queue
 
 
 class Data:
@@ -66,25 +67,42 @@ class Data:
             else:
                 print(f"Node {str(valueY)} already exists!")
 
-    def preOrd(self):
+    def preOrder(self):
         if(self.root):
             nodeList = []
-            nodeList = self._preOrd(self.root, nodeList)
+            nodeList = self._preOrder(self.root, nodeList)
 
             return nodeList
         else:
             print("Empty Tree")
 
-    def _preOrd(self, node, preList):
+    def _preOrder(self, node, preList):
         preList.append(node)
 
         if(node.hasLeftChild()):
-            self._preOrd(node.getLeftChild(), preList)
+            self._preOrder(node.getLeftChild(), preList)
 
         if(node.hasRightChild()):
-            self._preOrd(node.getRightChild(), preList)
+            self._preOrder(node.getRightChild(), preList)
 
         return preList
+
+    def inOrder(self):
+        if(self.root):
+            inNodeList=[]
+            inNodeList=self._inOrder(self.root, inNodeList)
+            return inNodeList
+        else:
+            print("Empty Tree")
+
+    def _inOrder(self, node, inList):
+        if(node.hasLeftChild()):
+            self._inOrder(node.getLeftChild(), inList)
+        inList.append(node)
+        if(node.hasRightChild()):
+            self._inOrder(node.getRightChild(), inList)
+
+        return inList
 
     def postOrder(self):
         if(self.root):
@@ -98,58 +116,33 @@ class Data:
 
         if(node.hasLeftChild()):
             self._postOrder(node.getLeftChild(), postList)
-
         if(node.hasRightChild()):
             self._postOrder(node.getRightChild(), postList)
-
         postList.append(node)
 
         return postList
 
-
-
-    def inOrder(self):
+    def width(self):
         if(self.root):
-            inNodeList=[]
-            inNodeList=self._postOrder(self.root, inNodeList)
-            return inNodeList
-        else:
-            print("Empty Tree")
-
-    def _postOrder(self, node, inList):
-
-        if(node.hasLeftChild()):
-            self._postOrder(node.getLeftChild(), inList)
-
-        inList.append(node)
-
-        if(node.hasRightChild()):
-            self._postOrder(node.getRightChild(), inList)
-        return inList
-
-        def width(self):
-            if(self.root):
-                widthList=[]
-                widthList=self._width(self.root, widthList)
-                return widthList
-            else:
-                print(">Empty Tree")
-
-        def _width(self, node, widthList):
-            listTmp=[]
-            nodeTmp=None
-            listTmp.append(node)
-            while len(listTmp>0):
-                nodeTmp= cola.pop(0)
-                widthList.append(nodeTmp)
-
-                if(nodeTmp.hasLeftChild()):
-                    listTmp.append(nodeTmp.getLeftChild())
-                if(nodeTmp.hasRightChild()):
-                    listTmp.append(nodeTmp.getRightChild())
+            widthList=[]
+            widthList=self._width(self.root, widthList)
             return widthList
+        else:
+            print(">Empty Tree")
 
-    
+    def _width(self, node, widthList):
+        listTmp=[]
+        nodeTmp=None
+        listTmp.append(node)
+        while len(listTmp) > 0:
+            nodeTmp = listTmp.pop(0)
+            widthList.append(nodeTmp)
+            if(nodeTmp.hasLeftChild()):
+                listTmp.append(nodeTmp.getLeftChild())
+            if(nodeTmp.hasRightChild()):
+                listTmp.append(nodeTmp.getRightChild())
+
+        return widthList
 
     def getListPoints(self):
         """
@@ -169,7 +162,7 @@ class Data:
 myData = Data()
 points = myData.getListPoints()
 
-l = myData.preOrd()
+l = myData.preOrder()
 
 for n in l:
     print(n.getLabel(), ": ", [n.getValueX(), n.getValueY()], " lvl: ", myData.getNodeLevel(n))
