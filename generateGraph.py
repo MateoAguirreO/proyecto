@@ -16,12 +16,13 @@ class Graph:
         self.tree = tree
         self.maxValue = 25
         self.intersections = []
+        self.type = type
 
-        if(type == "pre"):
+        if(self.type == "pre"):
             self.nodes = tree.preOrder()
-        elif(type == "in"):
+        elif(self.type == "in"):
             self.nodes = tree.inOrder()
-        elif(type == "post"):
+        elif(self.type == "post"):
             self.nodes = tree.postOrder()
         else:
             self.nodes = tree.width()
@@ -113,7 +114,7 @@ class Graph:
         for straight in straightsList:
             plt.plot(straight[0], straight[1])
             # Line to save the png's of each step in the process of making the straights
-            plt.savefig("img/"+str(i)+".png")
+            plt.savefig("img/"+self.type+str(i)+".png")
             i += 1
 
     def getProximValue(self, side, value, listofValues):
