@@ -17,11 +17,11 @@ class Graph:
         self.maxValue = 25
         self.intersections = []
 
-        if(type = "pre"):
+        if(type == "pre"):
             self.nodes = tree.preOrder()
-        elif(type = "in"):
+        elif(type == "in"):
             self.nodes = tree.inOrder()
-        elif(type = "post"):
+        elif(type == "post"):
             self.nodes = tree.postOrder()
         else:
             self.nodes = tree.width()
