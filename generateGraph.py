@@ -12,11 +12,19 @@ class Graph:
     """
     Class in charge to create the divisions in the plot, get lines and points and save it.
     """
-    def __init__(self, tree):
+    def __init__(self, tree, type):
         self.tree = tree
-        self.nodes = tree.preOrd()
         self.maxValue = 25
         self.intersections = []
+
+        if(type = "pre"):
+            self.nodes = tree.preOrder()
+        elif(type = "in"):
+            self.nodes = tree.inOrder()
+        elif(type = "post"):
+            self.nodes = tree.postOrder()
+        else:
+            self.nodes = tree.width()
 
         # Plot Canvas Configurations
         plt.axis([-0.5, self.maxValue+0.5, -0.5, self.maxValue+0.5])  # plt.axis([xmin, xmax, ymin, ymax])
