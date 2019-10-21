@@ -22,7 +22,8 @@ class Application(tk.Frame):
         self.colours = ["#ffe7ad", "#db75c5", "#a05f96", "#ffafb0", "#5eb7b7", "#b673e2", "#96d1c7", "#fc7978", "#edb5f5"]
 
         self.tree = Data.Data()
-        self.graph = generateGraph.Graph(self.tree)
+        self.type = "width"
+        self.graph = generateGraph.Graph(self.tree, self.type)
         self.graph.setGraph()
         self.rectangles = self.graph.getRectangles()
         # self.lines = self.graph.getListStraights()
@@ -65,9 +66,9 @@ class Application(tk.Frame):
 
     def nextGraph(self):
         if(self.canvas):
-            if(self.i >= len(self.tree.preOrd())+4):
+            if(self.i >= len(self.tree.preOrder())+4):
                 self.i = 4
-            img1 = Image.open("img/"+str(self.i)+".png")
+            img1 = Image.open("img/"+self.type+str(self.i)+".png")
             self.image = ImageTk.PhotoImage(img1.resize((512, 384)))
             self.canvas.create_image(350, 200, image=self.image)
             self.i += 1
