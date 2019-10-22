@@ -22,11 +22,10 @@ class Application(tk.Frame):
         self.colours = ["#ffe7ad", "#db75c5", "#a05f96", "#ffafb0", "#5eb7b7", "#b673e2", "#96d1c7", "#fc7978", "#edb5f5"]
 
         self.tree = Data.Data()
-        self.type = "width"
+        self.type = self.chooseBest()
         self.graph = generateGraph.Graph(self.tree, self.type)
         self.graph.setGraph()
         self.rectangles = self.graph.getRectangles()
-        # self.lines = self.graph.getListStraights()
 
     def createWidgets(self):
         self.i = 4
@@ -41,6 +40,11 @@ class Application(tk.Frame):
         self.btnWindowCanvas["command"] = self.windowCanvas
         self.btnWindowCanvas.pack(side="top")
 
+        # self.btnShowAlternatives = tk.Button(self)
+        # self.btnShowAlternatives["text"] = "Show Alternatives"
+        # self.btnShowAlternatives["command"] = self.showAlternatives
+        # self.btnShowAlternatives.pack(side="top")
+
         self.btnQuit = tk.Button(self, text="QUIT", fg="red", command=self.master.destroy)
         self.btnQuit.pack(side="bottom")
 
@@ -48,14 +52,19 @@ class Application(tk.Frame):
         window = tk.Toplevel(self.master)
         canvas = tk.Canvas(window, width=500, height=500)
         canvas.pack()
-        rects = []
+        rectangles = []
         i = 0
 
-        for rect in self.rectangles:
-            tag = "rect"+str(i)
-            rects.append(canvas.create_rectangle(rect[0][0]*20, (25-rect[0][1])*20, rect[1][0]*20, (25-rect[1][1])*20, fill=choice(self.colours), tags=tag))
+        for rectangle in self.rectangles:
+            x1, y1 = rectangle[0]
+            x2, y2 = rectangle[1]
+            tag = "rectangle"+str(i)
+
+            rectangles.append(canvas.create_rectangle(x1*20, (25-y1)*20, x2*20, (25-y2)*20, fill=choice(self.colours), tags=tag))
             canvas.tag_bind(tag, "<Button-1>", self.onmyclick)
             i += 1
+
+        print(len(rectangles))
 
     def onmyclick(self, event):
         print(event.widget.find_closest(event.x, event.y))
@@ -75,6 +84,53 @@ class Application(tk.Frame):
         else:
             self.createCanvas()
             self.nextGraph()
+
+    def getRectangleArea(self, rectangle):
+        x1, y1 = rectangle[0]
+        x2, y2 = rectangle[1]
+
+        area = (x2 - x1) * (y1 - y2)
+
+        return area
+
+    def getSmallerArea(self, rectanglesList):
+        # smaller = self.graph.maxValue**2
+        smaller = 25**2
+
+        for rectangle in rectanglesList:
+            area = self.getRectangleArea(rectangle)
+
+            if(area < smaller):
+                smaller = area
+
+        return smaller
+
+    def chooseBest(self):
+        graphs = []
+        smallersList = []
+
+        graphs.append(generateGraph.Graph(self.tree, "pre"))
+        graphs.append(generateGraph.Graph(self.tree, "in"))
+        graphs.append(generateGraph.Graph(self.tree, "post"))
+
+        for graph in graphs:
+            graph.setGraph()
+            rectanglesList = graph.getRectangles()
+            smallersList.append(self.getSmallerArea(rectanglesList))
+            graph.closeGraph()
+
+        maxArea = max(smallersList)
+        smaller = smallersList.index(maxArea)
+
+        if(smaller == 0):
+            print("The best option is Pre Order, because its big-smaller area is: ", maxArea)
+            return "pre"
+        elif(smaller == 1):
+            print("The best option is In Order, because its big-smaller area is: ", maxArea)
+            return "in"
+        else:
+            print("The best option is Post Order, because its big-smaller area is: ", maxArea)
+            return "post"
 
 root = tk.Tk()
 app = Application(master=root)
