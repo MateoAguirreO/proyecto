@@ -7,7 +7,6 @@ Created on Fri Sep 27 16:04:54 2019
 
 from Node import Node
 import json
-import Queue
 
 
 class Data:
