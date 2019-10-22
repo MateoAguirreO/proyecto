@@ -28,7 +28,6 @@ class Graph:
 
         # Plot Canvas Configurations
         plt.axis([-0.5, self.maxValue+0.5, -0.5, self.maxValue+0.5])  # plt.axis([xmin, xmax, ymin, ymax])
-        # plt.legend(loc="upper left")
 
     def setGraph(self):
         self.setPoints()
@@ -67,7 +66,10 @@ class Graph:
         """
 
         for node in self.nodes:
-            plt.plot(node.getValueX(), node.getValueY(), "bo")
+            lblNode = node.getLabel()
+            plt.plot(node.getValueX(), node.getValueY(), "o", label=lblNode, markersize=10)
+
+        plt.legend(loc="upper left")
 
     def getIntersections(self):
         return self.intersections
@@ -132,7 +134,7 @@ class Graph:
 
         i = 0
         for straight in straightsList:
-            plt.plot(straight[0], straight[1])
+            plt.plot(straight[0], straight[1], "black")
             # Line to save the png's of each step in the process of making the straights
             plt.savefig("img/"+self.type+str(i)+".png")
             i += 1
