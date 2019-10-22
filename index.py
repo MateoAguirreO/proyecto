@@ -20,16 +20,18 @@ class Application(tk.Frame):
         self.createWidgets()
         self.canvas = None
         self.colours = ["#ffe7ad", "#db75c5", "#a05f96", "#ffafb0", "#5eb7b7", "#b673e2", "#96d1c7", "#fc7978", "#edb5f5"]
+        self.chargeData()
+        self.i = 4
 
+    def chargeData(self):
         self.tree = Data.Data()
+        self.treeWeight = len(self.tree.preOrder())
         self.type = self.chooseBest()
         self.graph = generateGraph.Graph(self.tree, self.type)
         self.graph.setGraph()
         self.rectangles = self.graph.getRectangles()
 
     def createWidgets(self):
-        self.i = 4
-
         self.btnNextGraph = tk.Button(self)
         self.btnNextGraph["text"] = "> Next"
         self.btnNextGraph["command"] = self.nextGraph
@@ -60,14 +62,13 @@ class Application(tk.Frame):
             x2, y2 = rectangle[1]
             tag = "rectangle"+str(i)
 
-            rectangles.append(canvas.create_rectangle(x1*20, (25-y1)*20, x2*20, (25-y2)*20, fill=choice(self.colours), tags=tag))
-            canvas.tag_bind(tag, "<Button-1>", self.onmyclick)
+            newRectangle = canvas.create_rectangle(x1*20, (25-y1)*20, x2*20, (25-y2)*20, fill=choice(self.colours), tags=tag)
+            canvas.tag_bind(tag, "<Button-1>", lambda: self.changeColor())
+            rectangles.append(newRectangle)
             i += 1
 
-        print(len(rectangles))
-
-    def onmyclick(self, event):
-        print(event.widget.find_closest(event.x, event.y))
+    def changeColor(self):
+        return choice(self.colours)
 
     def createCanvas(self):
         self.canvas = tk.Canvas(self.master, width=700, height=400)
@@ -75,7 +76,7 @@ class Application(tk.Frame):
 
     def nextGraph(self):
         if(self.canvas):
-            if(self.i >= len(self.tree.preOrder())+4):
+            if(self.i >= self.treeWeight + 4):
                 self.i = 4
             img1 = Image.open("img/"+self.type+str(self.i)+".png")
             self.image = ImageTk.PhotoImage(img1.resize((512, 384)))
