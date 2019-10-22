@@ -7,6 +7,7 @@ Created on Fri Sep 27 16:04:54 2019
 
 from Node import Node
 import json
+import os
 
 
 class Data:
@@ -157,6 +158,24 @@ class Data:
 
         return parsedData["data"]
 
+    def deleteNode(self, label):
+        filePath = "data.json"
+
+        with open(filePath, "r") as db:
+            dbString = db.read()
+
+        parsedData = json.loads(dbString)
+
+        for node in parsedData["data"]:
+            if(node["label"] == label):
+                parsedData["data"].remove(node)
+
+        os.remove(filePath)
+
+        with open(filePath, 'w') as db:
+            json.dump(parsedData, db, indent=4)
+
+        print("Node deleted succesfully!")
 
 myData = Data()
 points = myData.getListPoints()
