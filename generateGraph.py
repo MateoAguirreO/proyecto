@@ -6,6 +6,7 @@
 
 import matplotlib.pyplot as plt
 import Data
+import os
 
 
 class Graph:
@@ -24,8 +25,6 @@ class Graph:
             self.nodes = tree.inOrder()
         elif(self.type == "post"):
             self.nodes = tree.postOrder()
-        else:
-            self.nodes = tree.width()
 
         # Plot Canvas Configurations
         plt.axis([-0.5, self.maxValue+0.5, -0.5, self.maxValue+0.5])  # plt.axis([xmin, xmax, ymin, ymax])
@@ -34,7 +33,12 @@ class Graph:
     def setGraph(self):
         self.setPoints()
         self.drawStraigths()
-        # plt.show()
+
+    def showGraph(self):
+        plt.show()
+
+    def closeGraph(self):
+        plt.close()
 
     def getStraight(self, axis, value, start, end):
         """
@@ -89,24 +93,40 @@ class Graph:
         for node in self.nodes:
             if(self.tree.getNodeLevel(node) % 2 == 0):
                 limSouth, limNorth = self.limitVertical(straightsList, node.getValueX(), node.getValueY())
-                line = self.getStraight("x", node.getValueX(), limSouth, limNorth)
-                self.intersections.append([node.getValueX(), limSouth])
-                self.intersections.append([node.getValueX(), limNorth])
+
+                if(self.pointInLineX([node.getValueX(), node.getValueY()], straightsList)):
+                    line = self.getStraight("x", node.getValueX(), limSouth, node.getValueY())
+                    self.intersections.append([node.getValueX(), limSouth])
+                    self.intersections.append([node.getValueX(), node.getValueY()])
+                else:
+                    line = self.getStraight("x", node.getValueX(), limSouth, limNorth)
+                    self.intersections.append([node.getValueX(), limSouth])
+                    self.intersections.append([node.getValueX(), limNorth])
                 straightsList.append(line)
             else:
                 limWest, limEast = self.limitHorizontal(straightsList, node.getValueX(), node.getValueY())
-                line = self.getStraight("y", node.getValueY(), limWest, limEast)
-                self.intersections.append([limWest, node.getValueY()])
-                self.intersections.append([limEast, node.getValueY()])
+
+                if(self.pointInLineY([node.getValueX(), node.getValueY()], straightsList)):
+                    line = self.getStraight("y", node.getValueY(), node.getValueX(), limEast)
+                    self.intersections.append([node.getValueX(), node.getValueY()])
+                    self.intersections.append([limEast, node.getValueY()])
+                else:
+                    line = self.getStraight("y", node.getValueY(), limWest, limEast)
+                    self.intersections.append([limWest, node.getValueY()])
+                    self.intersections.append([limEast, node.getValueY()])
                 straightsList.append(line)
 
         return straightsList
-
 
     def drawStraigths(self):
         """
         Draw the straights on the main plot and save the step-by-step on the folder /img/.
         """
+        #
+        # files = os.listdir("img/")
+        #
+        # for name in files:
+        #     os.remove("img/%s" % name)
 
         straightsList = self.getListStraights()
 
@@ -205,14 +225,55 @@ class Graph:
         for point in intersections:
             pointX, pointY = point
 
-            if(pointX < self.maxValue and pointY > 0):
-                nothing, nextPointX = self.limitHorizontal(lines, pointX, pointY)
-                hLine, nothing2 = self.limitVertical(lines, pointX+0.01, pointY)
+            if(self.lineIsUnderToPoint(point, lines) and self.lineIsRightToPoint(point, lines)):
+                if(pointX < self.maxValue and pointY > 0):
+                    nothing, nextPointX = self.limitHorizontal(lines, pointX, pointY-0.01)
+                    hLine, nothing2 = self.limitVertical(lines, pointX+0.01, pointY)
 
-                if([nextPointX, hLine] in intersections):
-                    rectangles.append([point, [nextPointX, hLine]])
+                    if([nextPointX, hLine] in intersections):
+                        rectangles.append([point, [nextPointX, hLine]])
 
         return rectangles
+
+    def lineIsUnderToPoint(self, point, linesList):
+        pointX, pointY = point
+
+        for line in linesList:
+            if(line[0][0] == pointX and line[0][1] == pointX):
+                if(line[1][0] < pointY):
+                    return True
+
+        return False
+
+    def lineIsRightToPoint(self, point, linesList):
+        pointX, pointY = point
+
+        for line in linesList:
+            if(line[1][0] == pointY and line[1][1] == pointY):
+                if(line[0][1] > pointX):
+                    return True
+
+        return False
+
+    def pointInLineX(self, point, linesList):
+        pointX, pointY = point
+
+        for line in linesList:
+            if(line[1][0] == pointY and line[1][1] == pointY):
+                if(line[0][0] < pointX and line[0][1] > pointX):
+                    return True
+
+        return False
+
+    def pointInLineY(self, point, linesList):
+        pointX, pointY = point
+
+        for line in linesList:
+            if(line[0][0] == pointX and line[0][1] == pointX):
+                if(line[1][0] < pointY and line[1][1] > pointY):
+                    return True
+
+        return False
 
 # tree = Data.Data()
 # graph = Graph(tree)
