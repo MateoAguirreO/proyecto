@@ -1,55 +1,54 @@
 {
-    "data":[
+    "data": [
         {
-            "label":"a",
+            "label": "a",
             "x": 5,
-            "y": 8
+            "y": 10
         },
         {
-            "label":"b",
+            "label": "b",
             "x": 1,
             "y": 13
         },
         {
-            "label":"c",
+            "label": "c",
             "x": 10,
             "y": 15
         },
         {
-            "label":"d",
+            "label": "d",
             "x": 15,
             "y": 12
         },
         {
-            "label":"e",
+            "label": "e",
             "x": 14,
             "y": 8
         },
         {
-            "label":"f",
+            "label": "f",
             "x": 23,
             "y": 12
         },
         {
-            "label":"g",
+            "label": "g",
             "x": 17,
             "y": 10
         },
         {
-            "label" : "h",
+            "label": "h",
             "x": 1,
             "y": 1
         },
         {
-            "label" : "i",
+            "label": "i",
             "x": 19,
             "y": 4
         },
         {
-            "label" : "j",
+            "label": "j",
             "x": 21,
             "y": 20
         }
-
     ]
 }
