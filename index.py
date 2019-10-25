@@ -42,13 +42,64 @@ class Application(tk.Frame):
         self.btnWindowCanvas["command"] = self.windowCanvas
         self.btnWindowCanvas.pack(side="top")
 
-        # self.btnShowAlternatives = tk.Button(self)
-        # self.btnShowAlternatives["text"] = "Show Alternatives"
-        # self.btnShowAlternatives["command"] = self.showAlternatives
-        # self.btnShowAlternatives.pack(side="top")
+        self.btnShowAlternatives = tk.Button(self)
+        self.btnShowAlternatives["text"] = "Show Alternatives"
+        self.btnShowAlternatives["command"] = self.showAlternatives
+        self.btnShowAlternatives.pack(side="top")
+
+        self.btnModifyPoint = tk.Button(self)
+        self.btnModifyPoint["text"] = "Modify Point"
+        self.btnModifyPoint["command"] = self.modifyPoint
+        self.btnModifyPoint.pack(side="right")
 
         self.btnQuit = tk.Button(self, text="QUIT", fg="red", command=self.master.destroy)
         self.btnQuit.pack(side="bottom")
+
+    def modifyPoint(self):
+        window = tk.Toplevel(self.master)
+        labelPoint = tk.Label(window, text='Ingresa el label del punto: ')
+        labelPoint.pack()
+
+        entryLabel = tk.Entry(window)
+        entryLabel.pack()
+
+        valueX = tk.Label(window, text='Ingresa el valor X del punto: ')
+        valueX.pack()
+
+        entryValueX = tk.Entry(window)
+        entryValueX.pack()
+
+        valueY = tk.Label(window, text='Ingresa el valor Y del punto: ')
+        valueY.pack()
+
+        entryValueY = tk.Entry(window)
+        entryValueY.pack()
+
+        btnChange = tk.Button(window, text='Change!', command=lambda: self.changePoint(entryLabel.get(), entryValueX.get(), entryValueY.get()))
+        btnChange.pack()
+
+    def changePoint(self, label, x, y):
+        self.tree.modifyNode(str(label), int(x), int(y))
+        self.chargeData()
+
+    def showAlternatives(self):
+        window = tk.Toplevel(self.master)
+        canvas = tk.Canvas(window, width=1080, height=900)
+        canvas.pack()
+
+        imgPre = Image.open("img/pre"+str(self.treeWeight+3)+".png")
+        imagePre = ImageTk.PhotoImage(imgPre.resize((512, 384)))
+        canvas.create_image(250, 160, image=imagePre)
+
+        imgIn = Image.open("img/in"+str(self.treeWeight+3)+".png")
+        imageIn = ImageTk.PhotoImage(imgIn.resize((512, 384)))
+        canvas.create_image(800, 160, image=imageIn)
+
+        imgPost = Image.open("img/post"+str(self.treeWeight+3)+".png")
+        imagePost = ImageTk.PhotoImage(imgPost.resize((512, 384)))
+        canvas.create_image(500, 530, image=imagePost)
+
+        canvas.create_image(image=imagePost)
 
     def windowCanvas(self):
         window = tk.Toplevel(self.master)
@@ -63,7 +114,9 @@ class Application(tk.Frame):
             tag = "rectangle"+str(i)
 
             newRectangle = canvas.create_rectangle(x1*20, (25-y1)*20, x2*20, (25-y2)*20, fill=choice(self.colours), tags=tag)
-            canvas.tag_bind(tag, "<Button-1>", lambda: self.changeColor())
+            labelRectangle = tk.Label(canvas, text="Cocina")
+            labelRectangle.place(x=(x1+0.3)*20, y=(26-y1)*20)
+            canvas.tag_bind(tag, "<Button-1>", self.changeColor)
             rectangles.append(newRectangle)
             i += 1
 
