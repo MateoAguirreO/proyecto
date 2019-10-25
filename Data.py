@@ -177,6 +177,27 @@ class Data:
 
         print("Node deleted succesfully!")
 
+    def modifyNode(self, label, x, y):
+        filePath = "data.json"
+
+        with open(filePath, "r") as db:
+            dbString = db.read()
+
+        parsedData = json.loads(dbString)
+
+        for node in parsedData["data"]:
+            if(node["label"] == label):
+                pos = parsedData["data"].index(node)
+                parsedData["data"][pos]["x"] = x
+                parsedData["data"][pos]["y"] = y
+
+        os.remove(filePath)
+
+        with open(filePath, 'w') as db:
+            json.dump(parsedData, db, indent=4)
+
+        print("Node modified succesfully!")
+
 myData = Data()
 points = myData.getListPoints()
 
