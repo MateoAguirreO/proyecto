@@ -105,7 +105,7 @@ class Application(tk.Frame):
         window = tk.Toplevel(self.master)
         canvas = tk.Canvas(window, width=500, height=500)
         canvas.pack()
-        rectangles = []
+        self.canvasRectangles = []
         i = 0
 
         for rectangle in self.rectangles:
@@ -116,12 +116,20 @@ class Application(tk.Frame):
             newRectangle = canvas.create_rectangle(x1*20, (25-y1)*20, x2*20, (25-y2)*20, fill=choice(self.colours), tags=tag)
             labelRectangle = tk.Label(canvas, text="Cocina")
             labelRectangle.place(x=(x1+0.3)*20, y=(26-y1)*20)
-            canvas.tag_bind(tag, "<Button-1>", self.changeColor)
-            rectangles.append(newRectangle)
+            canvas.tag_bind(tag, "<Button-1>", lambda event: self.changeColor(event))
+
+            components = {"rectangle":newRectangle, "label":labelRectangle, "tag":tag}
+            self.canvasRectangles.append(components)
             i += 1
 
-    def changeColor(self):
-        return choice(self.colours)
+    def changeColor(self, event):
+        canvas = event.widget
+        x = canvas.canvasx(event.x)
+        y = canvas.canvasy(event.y)
+
+        eventRectangle = canvas.find_closest(x,y)
+
+        canvas.itemconfig(eventRectangle, fill=choice(self.colours))
 
     def createCanvas(self):
         self.canvas = tk.Canvas(self.master, width=700, height=400)
