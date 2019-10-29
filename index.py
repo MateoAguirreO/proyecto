@@ -30,6 +30,8 @@ class Application(tk.Frame):
         self.graph = generateGraph.Graph(self.tree, self.type)
         self.graph.setGraph()
         self.rectangles = self.graph.getRectangles()
+        self.sumRectangles = len(self.rectangles)
+        self.labels = [None] * self.sumRectangles
 
     def createWidgets(self):
         self.btnNextGraph = tk.Button(self)
@@ -105,7 +107,6 @@ class Application(tk.Frame):
         window = tk.Toplevel(self.master)
         canvas = tk.Canvas(window, width=500, height=500)
         canvas.pack()
-        self.canvasRectangles = []
         i = 0
 
         for rectangle in self.rectangles:
@@ -114,12 +115,11 @@ class Application(tk.Frame):
             tag = "rectangle"+str(i)
 
             newRectangle = canvas.create_rectangle(x1*20, (25-y1)*20, x2*20, (25-y2)*20, fill=choice(self.colours), tags=tag)
-            labelRectangle = tk.Label(canvas, text="Cocina")
-            labelRectangle.place(x=(x1+0.3)*20, y=(26-y1)*20)
-            canvas.tag_bind(tag, "<Button-1>", lambda event: self.changeColor(event))
 
-            components = {"rectangle":newRectangle, "label":labelRectangle, "tag":tag}
-            self.canvasRectangles.append(components)
+            # Change the rectangle colour when right click is pressed
+            canvas.tag_bind(tag, "<Button-3>", lambda event: self.changeColor(event))
+            # Create a label in the rectangle when double-left click is pressed
+            canvas.tag_bind(tag, "<Double-1>", lambda event: self.getLabel(event))
             i += 1
 
     def changeColor(self, event):
@@ -130,6 +130,31 @@ class Application(tk.Frame):
         eventRectangle = canvas.find_closest(x,y)
 
         canvas.itemconfig(eventRectangle, fill=choice(self.colours))
+
+    def createLabel(self, event, userText, window):
+        window.destroy()
+        canvas = event.widget
+        x = canvas.canvasx(event.x)
+        y = canvas.canvasy(event.y)
+
+        eventRectangle = canvas.find_closest(x,y)
+        coordsRectangle = canvas.coords(eventRectangle)
+
+        if(self.labels[eventRectangle[0]] == None):        
+            labelRectangle = tk.Label(canvas, text=userText)
+            labelRectangle.place(x=coordsRectangle[0]+7, y=coordsRectangle[1]+10)
+            self.labels[eventRectangle[0]] = 1
+
+    def getLabel(self, event):
+        window = tk.Toplevel(self.master)
+        labelPoint = tk.Label(window, text='Ingresa el label del rectangulo: ')
+        labelPoint.pack()
+
+        entryLabel = tk.Entry(window)
+        entryLabel.pack()
+
+        btnChange = tk.Button(window, text='Submit', command=lambda: self.createLabel(event, entryLabel.get(), window))
+        btnChange.pack()
 
     def createCanvas(self):
         self.canvas = tk.Canvas(self.master, width=700, height=400)
