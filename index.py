@@ -35,6 +35,8 @@ class Application(tk.Frame):
         self.labels = [None] * self.sumRectangles
         self.model3d= generate3D.Model3d(self.rectangles)
 
+    def show3D(self):
+        self.model3d.getPlt().show()
 
     def createWidgets(self):
         self.btnNextGraph = tk.Button(self)
@@ -52,10 +54,18 @@ class Application(tk.Frame):
         self.btnShowAlternatives["command"] = self.showAlternatives
         self.btnShowAlternatives.pack(side="top")
 
+        self.btnQuit = tk.Button(self, text="See 3D Graph", command=self.show3D)
+        self.btnQuit.pack(side="top")
+
         self.btnModifyPoint = tk.Button(self)
-        self.btnModifyPoint["text"] = "Modify Point"
+        self.btnModifyPoint["text"] = "Modify Node"
         self.btnModifyPoint["command"] = self.modifyPoint
-        self.btnModifyPoint.pack(side="right")
+        self.btnModifyPoint.pack(side="top")
+
+        self.btnModifyPoint = tk.Button(self)
+        self.btnModifyPoint["text"] = "Delete Node"
+        self.btnModifyPoint["command"] = self.deletePoint
+        self.btnModifyPoint.pack(side="top")
 
         self.btnQuit = tk.Button(self, text="QUIT", fg="red", command=self.master.destroy)
         self.btnQuit.pack(side="bottom")
@@ -82,6 +92,21 @@ class Application(tk.Frame):
 
         btnChange = tk.Button(window, text='Change!', command=lambda: self.changePoint(entryLabel.get(), entryValueX.get(), entryValueY.get()))
         btnChange.pack()
+
+    def deletePoint(self):
+        window = tk.Toplevel(self.master)
+        labelPoint = tk.Label(window, text='Ingresa el label del punto: ')
+        labelPoint.pack()
+
+        entryLabel = tk.Entry(window)
+        entryLabel.pack()
+
+        btnChange = tk.Button(window, text='Delete!', command=lambda: self._deletePoint(entryLabel.get()))
+        btnChange.pack()
+
+    def _deletePoint(self, label):
+        self.tree.deleteNode(label)
+        super().__init__(self.master)
 
     def changePoint(self, label, x, y):
         self.tree.modifyNode(str(label), int(x), int(y))

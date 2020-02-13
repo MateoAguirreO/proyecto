@@ -7,7 +7,6 @@ import numpy as np
 
 class Model3d:
 
-
     def __init__(self, regtangles):
 
         self.xComponents=[]
@@ -44,9 +43,11 @@ class Model3d:
 
         # utilizamos el método bar3d para graficar las barras
         self.ax1.bar3d(self.xComponents, self.yComponents,self.zComponents , self.dx, self.dy, self.dz)
+        self.plt = plt
 
+    def getPlt(self):
         # Mostramos el gráfico
-        plt.show()
+        return self.plt
 
 
 
