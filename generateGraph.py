@@ -74,6 +74,7 @@ class Graph:
     def getIntersections(self):
         return self.intersections
 
+
     def getListStraights(self):
         """
         Returns a list of the straights

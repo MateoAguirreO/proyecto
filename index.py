@@ -9,6 +9,7 @@ from PIL import Image, ImageTk
 from random import choice
 import generateGraph
 import Data
+import generate3D
 
 
 class Application(tk.Frame):
@@ -32,6 +33,8 @@ class Application(tk.Frame):
         self.rectangles = self.graph.getRectangles()
         self.sumRectangles = len(self.rectangles)
         self.labels = [None] * self.sumRectangles
+        self.model3d= generate3D.Model3d(self.rectangles)
+
 
     def createWidgets(self):
         self.btnNextGraph = tk.Button(self)
@@ -140,7 +143,7 @@ class Application(tk.Frame):
         eventRectangle = canvas.find_closest(x,y)
         coordsRectangle = canvas.coords(eventRectangle)
 
-        if(self.labels[eventRectangle[0]] == None):        
+        if(self.labels[eventRectangle[0]] == None):
             labelRectangle = tk.Label(canvas, text=userText)
             labelRectangle.place(x=coordsRectangle[0]+7, y=coordsRectangle[1]+10)
             self.labels[eventRectangle[0]] = 1
